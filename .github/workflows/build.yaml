@@ -1,14 +1,14 @@
 name: Create/Publish Containers
 
-# Trigger on push and on PR against master. Note that we don't push
+# Trigger on push and on PR against main. Note that we don't push
 # containers to the registry if we're doing a PR.
 on:
   push:
     branches:
-    - 'master'
+    - 'main'
   pull_request:
     branches:
-    - 'master'
+    - 'main'
 
 jobs:
   build-and-push-image:
