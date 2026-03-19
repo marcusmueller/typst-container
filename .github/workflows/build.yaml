@@ -1,0 +1,54 @@
+name: Create/Publish Containers
+
+# Trigger on push and on PR against master. Note that we don't push
+# containers to the registry if we're doing a PR.
+on:
+  push:
+    branches:
+    - 'master'
+  pull_request:
+    branches:
+    - 'master'
+
+jobs:
+  build-and-push-image:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - path: ./
+            tag: typst-container:0.14.2
+    name: ${{ matrix.tag }}
+    environment: github-action-autobuild
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      # - name: Log in to the Docker Hub Container registry
+      #   if: ${{ github.event_name != 'pull_request' }}
+      #   uses: docker/login-action@v2
+      #   with:
+      #     username: ${{ secrets.DOCKERHUB_USERNAME }}
+      #     password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Log in to the GitHub Container registry
+        if: ${{ github.event_name != 'pull_request' }}
+        uses: docker/login-action@v4
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: |
+            samplefirstasklater/${{ matrix.tag }}
+          file: ${{ matrix.path }}/Dockerfile
+          # cache-from: type=s3,region=none,bucket=gnuradio-docker-cache,name=${{ matrix.tag }},endpoint_url=https://s3.us-west-002.backblazeb2.com,access_key_id=${{ secrets.MARCUS_B2_S3_BUCKET_KEY_ID }},secret_access_key=${{ secrets.MARCUS_B2_S3_BUCKET_KEY }}
+          # cache-to: type=s3,region=none,bucket=gnuradio-docker-cache,name=${{ matrix.tag }},endpoint_url=https://s3.us-west-002.backblazeb2.com,access_key_id=${{ secrets.MARCUS_B2_S3_BUCKET_KEY_ID }},secret_access_key=${{ secrets.MARCUS_B2_S3_BUCKET_KEY }}
