@@ -51,5 +51,5 @@ jobs:
           tags: |
             samplefirstasklater/${{ matrix.tag }}
           file: ${{ matrix.path }}/Dockerfile
-          cache-from: type=s3,region=none,bucket=gnuradio-docker-cache,name=${{ matrix.tag }},endpoint_url=https://s3.us-west-002.backblazeb2.com,access_key_id=${{ secrets.MARCUS_B2_S3_BUCKET_KEY_ID }},secret_access_key=${{ secrets.MARCUS_B2_S3_BUCKET_KEY }}
-          cache-to: type=s3,region=none,bucket=gnuradio-docker-cache,name=${{ matrix.tag }},endpoint_url=https://s3.us-west-002.backblazeb2.com,access_key_id=${{ secrets.MARCUS_B2_S3_BUCKET_KEY_ID }},secret_access_key=${{ secrets.MARCUS_B2_S3_BUCKET_KEY }}
+          cache-from: type=s3,region=none,bucket=private-image-cache,name=${{ matrix.tag }},endpoint_url=https://s3.us-west-002.backblazeb2.com,access_key_id=${{ secrets.MARCUS_B2_S3_BUCKET_KEY_ID }},secret_access_key=${{ secrets.MARCUS_B2_S3_BUCKET_KEY }}
+          cache-to: type=s3,region=none,bucket=private-image-cache,name=${{ matrix.tag }},endpoint_url=https://s3.us-west-002.backblazeb2.com,access_key_id=${{ secrets.MARCUS_B2_S3_BUCKET_KEY_ID }},secret_access_key=${{ secrets.MARCUS_B2_S3_BUCKET_KEY }}
