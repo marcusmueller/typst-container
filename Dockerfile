@@ -17,5 +17,6 @@ RUN ${DNF_COMMAND} install --refresh -y \
 RUN cargo install \
         --locked \
         --quiet \
+        --root / \
         typst-cli@${TYPST_VERSION}
 
